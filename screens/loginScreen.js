@@ -52,6 +52,9 @@ export default function LoginScreen({ navigation, route }) {
             secureTextEntry={true}
           />
         </View>
+        <TouchableOpacity onPress={() => navigation.navigate('Recovery')} style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={styles.forgot}>Forgot Password?</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity onPress={handleSignup} style={{ justifyContent: 'center', alignItems: 'center' }}>
           <Text style={styles.sign}>Sign In</Text>
