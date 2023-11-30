@@ -5,7 +5,7 @@ export default function LandingScreen({navigation}) {
   return (
     <View style={styles.container}>
        <Image source={require('../images/OGLogo.png')} style={styles.logo}/>
-      <Text style={{fontSize: 30, fontWeight: 'bold'}}>Welcome to my website</Text>
+      <Text style={{fontSize: 30, fontWeight: 'bold'}}>Welcome to my App</Text>
       <Text style={{fontSize: 18,}}>to start, please Sign In or Sign Up</Text>
       <Text style={{fontSize: 18, marginBottom: 20}}>if you don't have an account yet.</Text>
 
