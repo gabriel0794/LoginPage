@@ -4,8 +4,8 @@ import { SimpleLineIcons } from '@expo/vector-icons';
 
 export default function HomeScreen({ navigation }) {
   const handleLogout = () => {
-    // You might want to perform additional actions here before logging out
-    navigation.navigate('Landing'); // Navigate to the Login screen after logging out
+    
+    navigation.navigate('Landing'); 
   };
 
   return (

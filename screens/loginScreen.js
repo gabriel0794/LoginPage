@@ -6,7 +6,6 @@ export default function LoginScreen({ navigation, route }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  // Retrieve registered username from the navigation params
   const registeredUsername = route.params?.username;
 
   const handleSignup = () => {
@@ -15,9 +14,8 @@ export default function LoginScreen({ navigation, route }) {
 
     if (username === registeredUsername) {
       console.log('Valid credentials');
-      // Implement your authentication logic here
-
-      // Assuming successful authentication, navigate to the home screen
+      
+      
       navigation.navigate('Home');
     } else {
       console.error('Invalid credentials');

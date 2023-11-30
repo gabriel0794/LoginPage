@@ -12,7 +12,7 @@ export default function RegisterScreen({ navigation }) {
     if (password === confirmPassword) {
       console.log('Registered: ', { username, email, password });
 
-      // Navigate to the login screen after successful registration
+    
       navigation.navigate('Login', { username });
     } else {
       console.error('Passwords do not match!');
