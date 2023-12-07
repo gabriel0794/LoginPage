@@ -1,24 +1,51 @@
-import React, { useState } from 'react';
-import { View, Text, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import React from 'react';
+import { View, Text, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Image, ToastAndroid } from 'react-native';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import fetchServices from '../component/services/fetchServices';
 
-export default function LoginScreen({ navigation, route }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+export default function LoginScreen({ navigation}) {
 
-  const registeredUsername = route.params?.username;
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [errors, setErrors] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
 
-  const handleSignup = () => {
-    console.log('Entered credentials:', { username, password });
-    console.log('Registered username:', registeredUsername);
-
-    if (username === registeredUsername) {
-      console.log('Valid credentials');
-      
-      
-      navigation.navigate('Home');
-    } else {
-      console.error('Invalid credentials');
+  const showToast = (message = "Something went wrong") => {
+    ToastAndroid.show(message, 3000);
+  }
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+  
+      if (email === '') {
+        setErrors((prevErrors) => ({ ...prevErrors, email: true }));
+        return false;
+      }
+  
+      if (password === '') {
+        setErrors((prevErrors) => ({ ...prevErrors, password: true }));
+        return false;
+      }
+  
+      const url = 'http://192.168.1.5/api/v1/login';
+      const data = {
+        email,
+        password,
+      };
+  
+      const result = await fetchServices.postData(url, data);
+  
+      if (result?.message != null) {
+        showToast(result?.message);
+      } else {
+        console.log("Before navigation");
+        setTimeout(() => {navigation.navigate('Home');}, 1000);
+        console.log("After navigation");
+      }
+    } catch (e) {
+      console.log(e.toString());
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -26,17 +53,20 @@ export default function LoginScreen({ navigation, route }) {
     <SafeAreaView style={styles.main}>
       <View style={styles.container}>
         <Image source={require('../images/OGLogo.png')} style={styles.logo} />
-        <Text style={{ fontSize: 42, justifyContent: 'center', alignItems: 'center', textAlign: 'center', marginBottom: 20 }}>
+        <Text style={{ fontSize: 50, justifyContent: 'center', alignItems: 'center', textAlign: 'center', marginBottom: 20,color: '#FFFF' }}>
           Sign In
         </Text>
 
         <View style={styles.TextInput}>
-          <AntDesign name="user" size={24} color="black" />
+          <MaterialIcons name="alternate-email" size={24} color="black" />
           <TextInput
+            mode="outlined"
             style={styles.input}
-            placeholder="Username"
-            value={username}
-            onChangeText={(text) => setUsername(text)}
+            placeholder="Email"
+            label="Email"
+            value={email}
+            onChangeText={setEmail}
+            error={errors?.name}
           />
         </View>
 
@@ -45,16 +75,17 @@ export default function LoginScreen({ navigation, route }) {
           <TextInput
             style={styles.input}
             placeholder="Password"
-            value={password}
-            onChangeText={(text) => setPassword(text)}
             secureTextEntry={true}
+            value={password}
+            onChangeText={setPassword}
+            error={errors?.password}
           />
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('Recovery')} style={{ justifyContent: 'center', alignItems: 'center' }}>
           <Text style={styles.forgot}>Forgot Password?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleSignup} style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <TouchableOpacity onPress={handleLogin} style={{ justifyContent: 'center', alignItems: 'center' }}>
           <Text style={styles.sign}>Sign In</Text>
         </TouchableOpacity>
 
@@ -71,6 +102,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#98E4FF'
   },
   container: {
     alignContent: 'center',
@@ -87,10 +119,10 @@ const styles = StyleSheet.create({
     width: 280,
     maxWidth: '80%',
     padding: 15,
-    backgroundColor: '#D9D9D9',
-    borderRadius: 15,
     paddingBottom: 8,
     marginBottom: 20,
+    backgroundColor: '#FFFF',
+    borderRadius: 30
   },
   input: {
     flex: 1,
@@ -103,11 +135,11 @@ const styles = StyleSheet.create({
   },
   sign: {
     padding: 15,
-    backgroundColor: '#40F8FF',
+    backgroundColor: '#78C1F3',
     justifyContent: 'center',
     textAlign: 'center',
     marginTop: 15,
-    marginBottom: 2,
+    marginBottom: 15,
     width: 200,
     borderRadius: 10,
     fontSize: 20,
@@ -118,12 +150,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
     borderWidth: 2,
-    borderColor: '#40F8FF',
+    borderColor: '#FFFF',
     marginBottom: 2,
     width: 200,
     borderRadius: 10,
-    color: '#40F8FF',
-    marginTop: 15,
+    color: '#FFFF',
     fontSize: 20,
   },
 });

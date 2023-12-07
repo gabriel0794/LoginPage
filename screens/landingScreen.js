@@ -5,7 +5,7 @@ export default function LandingScreen({navigation}) {
   return (
     <View style={styles.container}>
        <Image source={require('../images/OGLogo.png')} style={styles.logo}/>
-      <Text style={{fontSize: 30, fontWeight: 'bold'}}>Welcome to my App</Text>
+      <Text style={{fontSize: 30, fontWeight: 'bold', color: '#FFFF'}}>Welcome to my App</Text>
       <Text style={{fontSize: 18,}}>to start, please Sign In or Sign Up</Text>
       <Text style={{fontSize: 18, marginBottom: 20}}>if you don't have an account yet.</Text>
 
@@ -24,7 +24,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#98E4FF'
     },
     logo: {
         width: 300,
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
     },
     sign: {
         padding: 15,
-        backgroundColor: '#40F8FF',
+        backgroundColor: '#78C1F3',
         justifyContent: 'center',
         textAlign: 'center',
         color: '#FFFF',
@@ -47,11 +48,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         textAlign: 'center',
         borderWidth: 2,
-        borderColor: '#40F8FF',
+        borderColor: '#FFFF',
         marginBottom: 2,
         width: 200,
         borderRadius: 10,
-        color: '#40F8FF',
+        color: '#FFFF',
         marginTop: 15,
         fontSize: 20
     },

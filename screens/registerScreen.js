@@ -1,35 +1,74 @@
-import React, { useState } from 'react';
-import { View, Text, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
+import React from 'react';
+import { View, Text, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Image, ToastAndroid } from 'react-native';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import fetchServices from '../component/services/fetchServices';
 
 export default function RegisterScreen({ navigation }) {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [repassword, setrePassword] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const [isError, setIsError] = React.useState(false);
+  
+  const showToast = (message = "Something went wrong") => {
+    ToastAndroid.show(message, 3000);
+  }
 
-  const handleRegistration = () => {
-    if (password === confirmPassword) {
-      console.log('Registered: ', { username, email, password });
+  const handleRegistration = async () => {
+    try{
+      setLoading(true);
+      if(name === "" || email === "" || password === ""){
+        showToast("Please input required data");
+        setIsError(true);
+        return false;
+      }
 
-    
-      navigation.navigate('Login', { username });
-    } else {
-      console.error('Passwords do not match!');
+      if(password !== repassword){
+        showToast("Password does not match");
+        setIsError(true);
+        return false;
+      }
+
+      const url = "http://192.168.1.5/api/v1/register";
+      const data = {
+        name,
+        email,
+        password,
+        password_confirmation: repassword,
+      };
+
+    const result = await fetchServices.postData(url, data);
+    console.debug(result);
+    if(result.message != null){
+      showToast(result?.message);
+    }else{
+      navigation.navigate('Login')
     }
-  };
+    }catch(e){
+      console.debug("test");
+      showToast(e.toString());
+    } finally{
+      setLoading(false);
+    }
+
+  }
 
   return (
     <SafeAreaView style={styles.main}>
       <View style={styles.container}>
         <Image source={require('../images/OGLogo.png')} style={styles.logo} />
-        <Text style={{ fontSize: 42, justifyContent: 'center', alignItems: 'center', textAlign: 'center', marginBottom: 20 }}>
+        <Text style={{ fontSize: 50,  marginBottom: 15, color: '#FFFF' }}>
           Register
         </Text>
 
         <View style={styles.TextInput}>
           <AntDesign name="user" size={24} color="black" />
-          <TextInput style={styles.input} placeholder="Username" value={username} onChangeText={(text) => setUsername(text)} />
+          <TextInput style={styles.input} placeholder="Name" 
+          label="Name"
+          value={name}
+          onChangeText={setName}
+          error={isError} />
         </View>
 
         <View style={styles.TextInput}>
@@ -37,8 +76,10 @@ export default function RegisterScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="Email Address"
+            label="Email Address"
             value={email}
-            onChangeText={(text) => setEmail(text)}
+            onChangeText={setEmail}
+            error={isError}
           />
         </View>
 
@@ -47,9 +88,11 @@ export default function RegisterScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="Password"
-            value={password}
-            onChangeText={(text) => setPassword(text)}
             secureTextEntry={true}
+            label="Password"
+            value={password}
+            onChangeText={setPassword}
+            error={isError} 
           />
         </View>
 
@@ -58,18 +101,25 @@ export default function RegisterScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="Confirm Password"
-            value={confirmPassword}
-            onChangeText={(text) => setConfirmPassword(text)}
             secureTextEntry={true}
+            label="rePassword"
+            value={repassword}
+            onChangeText={setrePassword}
+            error={isError} 
           />
         </View>
 
-        <TouchableOpacity onPress={handleRegistration} style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <View style={styles.signin}>
+        <TouchableOpacity 
+        loading={!loading} 
+        style={{ justifyContent: 'center', alignItems: 'center' }}
+        onPress={handleRegistration}>
           <Text style={styles.sign1}>Sign Up</Text>
         </TouchableOpacity>
+        </View>
         <View style={styles.already}>
           <Text>Already Sign Up?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <TouchableOpacity disable={loading} onPress={() => navigation.navigate('Login')}>
             <Text style={{ color: '#279EFF', textDecorationLine: 'underline', marginLeft: 5 }}>Sign In</Text>
           </TouchableOpacity>
         </View>
@@ -83,14 +133,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#98E4FF'
   },
   container: {
     alignContent: 'center',
     alignItems: 'center',
   },
   logo: {
-    width: 300,
-    height: 300,
+    width: 250,
+    height: 250,
   },
   TextInput: {
     justifyContent: 'center',
@@ -99,10 +150,10 @@ const styles = StyleSheet.create({
     width: 280,
     maxWidth: '80%',
     padding: 15,
-    backgroundColor: '#D9D9D9',
-    borderRadius: 15,
     paddingBottom: 8,
     marginBottom: 20,
+    backgroundColor: '#FFFF',
+    borderRadius: 30
   },
   input: {
     flex: 1,
@@ -118,11 +169,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
     borderWidth: 2,
-    borderColor: '#40F8FF',
+    borderColor: '#FFFF',
     marginBottom: 2,
     width: 200,
     borderRadius: 10,
-    color: '#40F8FF',
+    color: '#FFFF',
     fontSize: 20,
   },
   already: {

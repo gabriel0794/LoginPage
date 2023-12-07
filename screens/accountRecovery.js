@@ -6,9 +6,13 @@ import { MaterialIcons } from '@expo/vector-icons';
 export default function AccountRecovery({navigation}) {
   return (
 
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.main}>
+        <View style={styles.container}>
         <StatusBar />
-      <Text style={{fontSize: 40, fontWeight: 'bold'}}>Forgot Password?</Text>
+    <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <AntDesign name="arrowleft" size={35} color="black" style={{ alignContent: 'flex-start', marginTop: 50, right: 30}} />
+    </TouchableOpacity>    
+      <Text style={{fontSize: 40, fontWeight: 'bold', color: '#FFFF', marginTop: 90}}>Forgot Password?</Text>
       <Text style={{fontSize: 16}}>Don't we can recover that using your email</Text>
       
       <View style={styles.TextInput}>
@@ -18,20 +22,25 @@ export default function AccountRecovery({navigation}) {
       </View>
 
       <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.recov}>
-      <AntDesign name="arrowleft" size={24} color='#40F8FF'/>
-            <Text style={{color: '#40F8FF'}}>Send Recovery Instructions</Text>
+      <AntDesign name="arrowleft" size={24} color='#FFFF'/>
+            <Text style={{color: '#FFFF', fontSize: 18, marginLeft: 5, fontWeight: 'bold'}}>Send Recovery Instructions</Text>
         </TouchableOpacity>
-    
+    </View>
     </SafeAreaView> 
   )
 }
 
 const styles = StyleSheet.create({
-    container: {
+    main: {
         flex: 1,
-        top: 90,
-        paddingHorizontal: 20
-    },
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        backgroundColor: '#98E4FF'
+      },
+    //   container: {
+    //     alignContent: 'center',
+    //     alignItems: 'center',
+    //   },
     input: {
         marginLeft: 10,
     },
@@ -41,9 +50,9 @@ const styles = StyleSheet.create({
         width: 300,
         maxWidth: '80%',
         padding: 15,
-        backgroundColor: '#D9D9D9',
+        backgroundColor: '#FFFF',
         borderRadius: 15,
-        marginTop: 300,
+        marginTop: 100,
     },
     recov: {
         justifyContent: 'flex-start',
@@ -53,7 +62,7 @@ const styles = StyleSheet.create({
         maxWidth: '80%',
         padding: 15,
         borderWidth: 2,
-        borderColor: '#40F8FF',
+        borderColor: '#FFFF',
         borderRadius: 15,
         marginTop: 10,
     },
